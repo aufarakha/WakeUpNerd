@@ -37,7 +37,7 @@ class AddAlarmActivity : AppCompatActivity() {
         binding.secNum.setMaxValue(59);
 
         binding.btnSave.setOnClickListener {
-            val intent = Intent(this, ListAlarmActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
         }
     }

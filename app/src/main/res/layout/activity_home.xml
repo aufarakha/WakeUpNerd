@@ -13,27 +13,29 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="136dp"
+        android:fontFamily="@font/alexandria_bold"
         android:text="Wakeupnerd"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSettings"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnSettings"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:contentDescription="Settings"
-        android:src="@drawable/setting_buttton"
-        app:layout_constraintBottom_toBottomOf="@id/tvTitle"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="44dp"
+        android:backgroundTint="#EEF0F3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvTitle"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tvTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/setting_buttton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewAlarms"

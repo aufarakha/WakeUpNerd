@@ -14,9 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WakeUpNerd">
         <activity
-            android:name=".ListAlarmActivity"
-            android:exported="false" />
-        <activity
             android:name=".AlarmPlayActivity"
             android:exported="false" />
         <activity
