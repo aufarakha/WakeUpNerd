@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "920288852038",
+    "project_id": "math-alarm-78162",
+    "storage_bucket": "math-alarm-78162.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920288852038:android:ef5fc539bb29a0f77cb247",
+        "android_client_info": {
+          "package_name": "com.alarmify.wakeupnerd"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsHLFuXFr92DbJGHqYRK6ADtvwQlBTj_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
