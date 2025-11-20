@@ -7,6 +7,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.alarmify.wakeupnerd.databinding.ActivityAddAlarmBinding
 import android.content.Intent
+import android.text.InputType
+import android.widget.EditText
+import android.widget.NumberPicker
 
 class AddAlarmActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddAlarmBinding
@@ -22,6 +25,12 @@ class AddAlarmActivity : AppCompatActivity() {
 
         binding = ActivityAddAlarmBinding.inflate(layoutInflater) // ← inisialisasi
         setContentView(binding.root)
+
+        //block edit number picker
+        binding.firsNum.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+        binding.secNum.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+
+        
 
         binding.btnCancel.setOnClickListener {
            finish()
