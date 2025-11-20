@@ -35,12 +35,24 @@
         app:layout_constraintTop_toTopOf="@id/tvTitle"
         app:layout_constraintVertical_bias="1.0" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewAlarms"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="60dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
     <ImageView
         android:id="@+id/ivWeather"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:contentDescription="Ikon cuaca"
         android:src="@drawable/matahari_icon"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tvNoAlarm"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +69,7 @@
         android:textColor="@android:color/black"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tvAddAlarmHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,6 +83,7 @@
         android:text="klik tanda &quot;+&quot; dibawah untuk menambah alarm"
         android:textColor="@android:color/darker_gray"
         android:textSize="14sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
