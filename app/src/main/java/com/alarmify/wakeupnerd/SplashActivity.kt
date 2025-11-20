@@ -3,7 +3,6 @@ package com.alarmify.wakeupnerd
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,7 +22,7 @@ private val SplashTimeOut:Long = 3000
 
         }
         Handler().postDelayed({
-            startActivity(Intent(this, HomeRegisterActivity::class.java))
+            startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         }, SplashTimeOut)
     }

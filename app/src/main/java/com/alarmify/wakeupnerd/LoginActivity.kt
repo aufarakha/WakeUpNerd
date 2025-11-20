@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
-import com.alarmify.wakeupnerd.databinding.ActivityHomeRegisterBinding
 import com.alarmify.wakeupnerd.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -36,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.tosignUp.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
+            val intent = Intent(this, RegisterFormActivity::class.java)
             startActivity(intent)
         }
     }
