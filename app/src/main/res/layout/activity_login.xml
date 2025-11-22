@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/arrowback" />
+        app:srcCompat="@drawable/arrow_res" />
 
     <ImageView
         android:id="@+id/imageView"

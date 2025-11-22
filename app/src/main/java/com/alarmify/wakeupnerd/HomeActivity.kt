@@ -58,9 +58,9 @@ class HomeActivity : AppCompatActivity() {
     private fun loadAlarms() {
         alarmList.clear()
         alarmList.addAll(listOf(
-            Alarm("07:00", "Sekali, Hari Minggu", true, false),
+            /*Alarm("07:00", "Sekali, Hari Minggu", true, false),
             Alarm("12:00", "Harian, Kerja Kantor", false, true),
-            Alarm("09:30", "Sekali, Sarapan", true, false)
+            Alarm("09:30", "Sekali, Sarapan", true, false)*/
         ))
         alarmAdapter.notifyDataSetChanged()
         updateEmptyState()

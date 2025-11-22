@@ -31,11 +31,12 @@
         android:layout_marginStart="76dp"
         android:layout_marginTop="44dp"
         android:backgroundTint="#EEF0F3"
+        android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tvTitle"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/setting_buttton" />
+        app:srcCompat="@drawable/settings_res" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewAlarms"
@@ -53,7 +54,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:contentDescription="Ikon cuaca"
-        android:src="@drawable/matahari_icon"
+        android:src="@drawable/matahari_res"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/tvNoAlarm"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.887"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/add_button"
+        app:srcCompat="@drawable/plus_res"
         app:tint="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,9 +34,11 @@ class AddAlarmActivity : AppCompatActivity() {
 
         binding.btnCancel.setOnClickListener {
            finish()
+
         }
         binding.backHome.setOnClickListener {
             finish()
+
         }
 
 
@@ -48,6 +50,7 @@ class AddAlarmActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
+
         }
     }
 }

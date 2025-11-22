@@ -17,7 +17,7 @@
         android:layout_marginTop="16dp"
         android:contentDescription="Kembali"
         android:padding="8dp"
-        android:src="@drawable/arrowback"
+        android:src="@drawable/arrow_res"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -151,7 +151,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tvQuestionCount"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/arrow_left"
+            app:srcCompat="@drawable/arrow_left_res"
             android:backgroundTint="@color/white"/>
 
         <ImageButton
@@ -161,7 +161,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/arrow_right"
+            app:srcCompat="@drawable/arrow_right_res"
             android:backgroundTint="@color/white"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
