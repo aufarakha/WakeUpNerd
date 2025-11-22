@@ -10,4 +10,9 @@
         <item name="colorOnPrimary">@color/white</item>
 
     </style>
+
+
+    <style name="ToggleButton.Blue" parent="ThemeOverlay.Material3.Button">
+        <item name="android:backgroundTint">@color/toggle_bg_selector</item>
+    </style>
 </resources>

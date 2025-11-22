@@ -77,8 +77,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvDifficultyLabel"
             app:selectionRequired="true"
-            app:singleSelection="true"
-            android:theme="@style/blueButtonToggle.Overlay">
+            android:theme="@style/ToggleButton.Blue"
+            app:singleSelection="true">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEasy"

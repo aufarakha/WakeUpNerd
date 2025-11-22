@@ -10,12 +10,18 @@
 
     <style name="Theme.WakeUpNerd" parent="Base.Theme.WakeUpNerd" />
 
-    <style name="blueButtonToggle.Overlay" parent="">
-        <item name="colorPrimary">@color/biru</item>
+        <style name="blueButtonToggle.Overlay" parent="">
+            <item name="colorPrimary">@color/biru</item>
 
-        <item name="colorOnPrimary">@color/white</item>
+            <item name="colorOnPrimary">@color/white</item>
 
+        </style>
+
+    <style name="ToggleButton.Blue" parent="ThemeOverlay.Material3.Button">
+        <item name="android:backgroundTint">@color/toggle_bg_selector</item>
     </style>
+
+
 
     <style name="MyNumberPickerTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:textColorPrimary">@color/black</item>
