@@ -13,7 +13,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="136dp"
+        android:layout_marginStart="126dp"
         android:fontFamily="@font/alexandria_bold"
         android:text="Wakeupnerd"
         android:textColor="@color/black"
@@ -22,14 +22,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/btnSettings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnSettings"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.555" />
 
     <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="76dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="30dp"
         android:backgroundTint="#EEF0F3"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"
