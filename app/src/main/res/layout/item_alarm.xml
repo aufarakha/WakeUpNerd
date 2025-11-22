@@ -14,7 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:background="@color/white">
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/rounded_white_bg">
 
         <TextView
             android:id="@+id/tvTime"
@@ -32,7 +34,7 @@
             android:id="@+id/tvDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sekali, Hari Minggu"
+            android:text="$Ulangi, $Label"
             android:fontFamily="@font/alexandria_regular"
             android:textColor="@android:color/darker_gray"
             android:textSize="14sp"
