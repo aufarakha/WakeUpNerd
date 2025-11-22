@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="32dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="32dp">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit alarm label"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/input_rounded"
+            android:hint="Enter label"
+            android:padding="16dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="#999999"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDialogTitle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDialogCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="#E0E0E0"
+            android:paddingVertical="16dp"
+            android:text="Cancel"
+            android:textColor="#666666"
+            android:textSize="18sp"
+            app:cornerRadius="16dp"
+            app:rippleColor="#40666666"
+            app:layout_constraintEnd_toStartOf="@id/btnDialogSet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editLabel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDialogSet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#03A9F4"
+            android:paddingVertical="16dp"
+            android:text="Set"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:cornerRadius="16dp"
+            app:rippleColor="#40FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnDialogCancel"
+            app:layout_constraintTop_toTopOf="@id/btnDialogCancel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

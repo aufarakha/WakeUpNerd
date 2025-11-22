@@ -53,6 +53,38 @@ class AddAlarmActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
+
+        binding.cardLabel.setOnClickListener {
+            showLabelDialog()
+        }
+
+    }
+
+    private fun showLabelDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_edit_label, null)
+        val editText = dialogView.findViewById<EditText>(R.id.editLabel)
+
+        editText.setText(binding.labeltxt.text)
+
+        val dialog = androidx.appcompat.app.AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnDialogCancel).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnDialogSet).setOnClickListener {
+            val newLabel = editText.text.toString()
+            if (newLabel.isNotEmpty()) {
+                binding.labeltxt.text = newLabel
+            }
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 }

@@ -211,12 +211,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <EditText
+        <TextView
             android:id="@+id/labeltxt"
-            android:layout_width="109dp"
-            android:layout_height="47dp"
-            android:ems="10"
-            android:inputType="text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
             android:text="Hari Minggu"
             android:textColor="#03A9F4"
             app:layout_constraintBottom_toBottomOf="parent"
