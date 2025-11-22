@@ -108,7 +108,7 @@
         android:layout_height="59dp"
         android:layout_marginBottom="132dp"
         android:backgroundTint="@color/biru"
-
+        app:rippleColor="#40FFFFFF"
         android:text="Sign Up"
         android:textColor="@color/white"
         android:textSize="20sp"

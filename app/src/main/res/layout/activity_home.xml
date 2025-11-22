@@ -99,6 +99,7 @@
         android:layout_marginBottom="48dp"
         android:contentDescription="Tambah Alarm"
         android:stateListAnimator="@null"
+        app:rippleColor="#40FFFFFF"
         app:elevation="2dp"
         app:pressedTranslationZ="0dp"
         app:backgroundTint="#03A9F4"

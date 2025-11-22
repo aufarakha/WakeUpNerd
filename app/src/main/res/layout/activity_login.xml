@@ -14,7 +14,7 @@
         android:layout_height="37dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:background="@android:color/transparent"
+        android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -109,7 +109,7 @@
         android:layout_height="59dp"
         android:layout_marginBottom="192dp"
         android:backgroundTint="@color/biru"
-
+        app:rippleColor="#40FFFFFF"
         android:text="Log In"
         android:textColor="@color/white"
         android:textSize="20sp"

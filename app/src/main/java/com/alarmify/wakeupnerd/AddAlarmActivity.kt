@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.alarmify.wakeupnerd.databinding.ActivityAddAlarmBinding
 import android.content.Intent
+import android.graphics.Color
 import android.text.InputType
 import android.widget.EditText
 import android.widget.NumberPicker
@@ -53,4 +54,5 @@ class AddAlarmActivity : AppCompatActivity() {
 
         }
     }
+
 }
