@@ -1,10 +1,12 @@
 package com.alarmify.wakeupnerd.data
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.alarmify.wakeupnerd.R
 import com.google.android.material.card.MaterialCardView
@@ -12,7 +14,8 @@ import com.google.android.material.materialswitch.MaterialSwitch
 
 class AlarmAdapter(
     private val alarms: List<Alarm>,
-    private val onSwitchChanged: (Int, Boolean) -> Unit
+    private val onSwitchChanged: (Int, Boolean) -> Unit,
+    private val onAlarmClick: (Int) -> Unit
 ) : RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
     inner class AlarmViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -20,6 +23,8 @@ class AlarmAdapter(
         val tvDesc: TextView = itemView.findViewById(R.id.tvDesc)
         val switchAlarm: MaterialSwitch = itemView.findViewById(R.id.switchAlarm)
         val cardAlarm: MaterialCardView = itemView.findViewById(R.id.cardAlarm)
+        val cardlayout: ConstraintLayout = itemView.findViewById(R.id.cardlayout)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AlarmViewHolder {
@@ -35,6 +40,8 @@ class AlarmAdapter(
         holder.tvDesc.text = alarm.description
         holder.switchAlarm.isChecked = alarm.isEnabled
 
+        Log.d("AlarmAdapter", "OnBind called")
+
         // Set stroke for highlighted alarm
         if (alarm.isHighlighted) {
             holder.cardAlarm.strokeColor = 0xFF03A9F4.toInt()
@@ -44,8 +51,15 @@ class AlarmAdapter(
         }
 
         holder.switchAlarm.setOnCheckedChangeListener { _, isChecked ->
+            Log.d("AlarmAdapter", "Switch clicked")
             onSwitchChanged(position, isChecked)
         }
+
+        holder.cardlayout.setOnClickListener {
+            Log.d("AlarmAdapter", "Alarm card clicked at position: $position")
+            onAlarmClick(position)
+        }
+
     }
 
     override fun getItemCount() = alarms.size

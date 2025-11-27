@@ -23,6 +23,8 @@ private val SplashTimeOut:Long = 3000
         }
         Handler().postDelayed({
             startActivity(Intent(this, RegisterActivity::class.java))
+            //startActivity(Intent(this, RepeatActivity::class.java))
+
             finish()
         }, SplashTimeOut)
     }

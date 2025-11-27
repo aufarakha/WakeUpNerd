@@ -1,6 +1,7 @@
 package com.alarmify.wakeupnerd
 
 import android.content.Intent
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -81,7 +82,8 @@ class RingtoneActivity : AppCompatActivity() {
         if (ringtonesDir.exists()) {
             ringtonesDir.listFiles()?.forEach { file ->
                 if (file.isFile && file.extension in listOf("mp3", "m4a", "wav", "ogg")) {
-                    myRingtonesList.add(Ringtone(file.nameWithoutExtension, "00:00"))
+                    val duration = getAudioDurationFromFile(file)
+                    myRingtonesList.add(Ringtone(file.nameWithoutExtension, duration))
                 }
             }
         }
@@ -106,6 +108,11 @@ class RingtoneActivity : AppCompatActivity() {
     private fun handleApplyRingtone(ringtone: Ringtone) {
         // Handle apply ringtone logic
         // You can pass the selected ringtone back to AddAlarmActivity
+        // Pass the selected ringtone back to AddAlarmActivity
+        val resultIntent = Intent().apply {
+            putExtra("SELECTED_RINGTONE", ringtone.name)
+        }
+        setResult(RESULT_OK, resultIntent)
         finish()
     }
 
@@ -132,8 +139,8 @@ class RingtoneActivity : AppCompatActivity() {
                 }
             }
 
-            // Get audio duration (simplified - you may want to use MediaMetadataRetriever)
-            val duration = "00:00"
+            // Get audio duration using MediaMetadataRetriever
+            val duration = getAudioDuration(uri)
 
             // Add to my ringtones list
             myRingtonesList.add(0, Ringtone(fileName.substringBeforeLast("."), duration))
@@ -155,5 +162,35 @@ class RingtoneActivity : AppCompatActivity() {
             }
         }
         return fileName
+    }
+
+    private fun getAudioDuration(uri: Uri): String {
+        return try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(this, uri)
+            val durationMs = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0L
+            retriever.release()
+
+            val seconds = (durationMs / 1000) % 60
+            val minutes = (durationMs / (1000 * 60)) % 60
+            String.format("%02d:%02d", minutes, seconds)
+        } catch (e: Exception) {
+            "00:00"
+        }
+    }
+
+    private fun getAudioDurationFromFile(file: File): String {
+        return try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(file.absolutePath)
+            val durationMs = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLongOrNull() ?: 0L
+            retriever.release()
+
+            val seconds = (durationMs / 1000) % 60
+            val minutes = (durationMs / (1000 * 60)) % 60
+            String.format("%02d:%02d", minutes, seconds)
+        } catch (e: Exception) {
+            "00:00"
+        }
     }
 }

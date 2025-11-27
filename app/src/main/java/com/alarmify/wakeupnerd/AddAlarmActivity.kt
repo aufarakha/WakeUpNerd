@@ -2,57 +2,120 @@ package com.alarmify.wakeupnerd
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.alarmify.wakeupnerd.databinding.ActivityAddAlarmBinding
 import android.content.Intent
-import android.graphics.Color
-import android.text.InputType
 import android.widget.EditText
 import android.widget.NumberPicker
+import android.widget.Toast
+import com.alarmify.wakeupnerd.data.Alarm
+import com.alarmify.wakeupnerd.data.AlarmStorageManager
 
 class AddAlarmActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddAlarmBinding
+    private var isEditMode = false
+    private var currentAlarmId: String? = null
+    private var isAmSelected = true // Track AM/PM selection
+
+    // ActivityResultLauncher for RingtoneActivity
+    private val ringtonePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedRingtone = result.data?.getStringExtra("SELECTED_RINGTONE")
+            selectedRingtone?.let {
+                binding.valueRingtone.text = it
+            }
+        }
+    }
+
+    // ActivityResultLauncher for RepeatActivity
+    private val repeatPickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedRepeat = result.data?.getStringExtra("SELECTED_REPEAT")
+            selectedRepeat?.let {
+                binding.valueRepeat.text = it
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_add_alarm)
+        binding = ActivityAddAlarmBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        binding = ActivityAddAlarmBinding.inflate(layoutInflater) // ← inisialisasi
-        setContentView(binding.root)
+        // Setup number pickers
+        setupNumberPickers()
 
-        //block edit number picker
+        // Check if in edit mode
+        isEditMode = intent.getBooleanExtra("EDIT_MODE", false)
+        currentAlarmId = intent.getStringExtra("ALARM_ID")
+
+        // Update UI based on mode
+        if (isEditMode && currentAlarmId != null) {
+            binding.tvTitle.text = "Edit Alarm"
+            binding.btnCancel.text = "Hapus"
+            loadAlarmData(currentAlarmId!!)
+        } else {
+            binding.tvTitle.text = "Tambah Alarm"
+            binding.btnCancel.text = "Batal"
+            // Set default values for new alarm
+            setDefaultValues()
+        }
+
+        setupClickListeners()
+    }
+
+    private fun setupNumberPickers() {
+        // Block edit on number pickers
         binding.firsNum.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
         binding.secNum.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
-        
+        // Set ranges
+        binding.firsNum.minValue = 1
+        binding.firsNum.maxValue = 12
+        binding.firsNum.value = 7 // Default 7:00 AM
 
+        binding.secNum.minValue = 0
+        binding.secNum.maxValue = 59
+        binding.secNum.value = 0
+    }
+
+    private fun setDefaultValues() {
+        binding.labeltxt.text = ""
+        binding.valueRingtone.text = "Alarm clock"
+        binding.valueRepeat.text = "Sekali"
+        binding.valueVibrate.text = "Aktif"
+        selectAmPm(true) // Default to AM
+    }
+
+    private fun setupClickListeners() {
         binding.btnCancel.setOnClickListener {
-           finish()
-
+            if (isEditMode && currentAlarmId != null) {
+                // Delete alarm
+                deleteAlarm()
+            } else {
+                finish()
+            }
         }
+
         binding.backHome.setOnClickListener {
             finish()
-
         }
 
-
-        binding.firsNum.setMinValue(0);
-        binding.firsNum.setMaxValue(24);
-        binding.secNum.setMinValue(0);
-        binding.secNum.setMaxValue(59);
-
-
         binding.btnSave.setOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-
+            saveAlarm()
         }
 
         binding.cardLabel.setOnClickListener {
@@ -70,14 +133,97 @@ class AddAlarmActivity : AppCompatActivity() {
 
         binding.cardRingtone.setOnClickListener {
             val intent = Intent(this, RingtoneActivity::class.java)
-            startActivity(intent)
+            ringtonePickerLauncher.launch(intent)
         }
 
-        
+        binding.cardRepeat.setOnClickListener {
+            val intent = Intent(this, RepeatActivity::class.java)
+            intent.putExtra("CURRENT_REPEAT", binding.valueRepeat.text.toString())
+            repeatPickerLauncher.launch(intent)
+        }
 
+        binding.cardVibrate.setOnClickListener {
+            if (binding.valueVibrate.text.toString() == "Aktif") {
+                binding.valueVibrate.text = "Nonaktif"
+            } else {
+                binding.valueVibrate.text = "Aktif"
+            }
+        }
+    }
+
+    private fun loadAlarmData(alarmId: String) {
+        val alarm = AlarmStorageManager.getAlarmById(this, alarmId)
+
+        if (alarm != null) {
+            // Set time
+            binding.firsNum.value = alarm.hour
+            binding.secNum.value = alarm.minute
+
+            // Set AM/PM
+            selectAmPm(!alarm.isPM)
+
+            // Set label
+            binding.labeltxt.text = alarm.label
+
+            // Set ringtone
+            binding.valueRingtone.text = alarm.ringtone
+
+            // Set repeat
+            binding.valueRepeat.text = alarm.repeat
+
+            // Set vibrate
+            binding.valueVibrate.text = if (alarm.vibrate) "Aktif" else "Nonaktif"
+        }
+    }
+
+    private fun saveAlarm() {
+        val hour = binding.firsNum.value
+        val minute = binding.secNum.value
+        val label = binding.labeltxt.text.toString()
+        val ringtone = binding.valueRingtone.text.toString()
+        val repeat = binding.valueRepeat.text.toString()
+        val vibrate = binding.valueVibrate.text.toString() == "Aktif"
+
+        val alarm = Alarm(
+            id = currentAlarmId ?: System.currentTimeMillis().toString(),
+            hour = hour,
+            minute = minute,
+            isPM = !isAmSelected,
+            label = label,
+            ringtone = ringtone,
+            repeat = repeat,
+            vibrate = vibrate,
+            isEnabled = true
+        )
+
+        val success = AlarmStorageManager.saveAlarm(this, alarm)
+
+        if (success) {
+            Toast.makeText(this, "Alarm tersimpan", Toast.LENGTH_SHORT).show()
+            setResult(RESULT_OK)
+            finish()
+        } else {
+            Toast.makeText(this, "Gagal menyimpan alarm", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun deleteAlarm() {
+        currentAlarmId?.let { id ->
+            val success = AlarmStorageManager.deleteAlarm(this, id)
+
+            if (success) {
+                Toast.makeText(this, "Alarm dihapus", Toast.LENGTH_SHORT).show()
+                setResult(RESULT_OK)
+                finish()
+            } else {
+                Toast.makeText(this, "Gagal menghapus alarm", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun selectAmPm(isAm: Boolean) {
+        isAmSelected = isAm
+
         if (isAm) {
             // AM selected - blue background, white text
             binding.btnAm.setBackgroundResource(R.drawable.rounder_bluebg)
@@ -115,13 +261,10 @@ class AddAlarmActivity : AppCompatActivity() {
 
         dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnDialogSet).setOnClickListener {
             val newLabel = editText.text.toString()
-            if (newLabel.isNotEmpty()) {
-                binding.labeltxt.text = newLabel
-            }
+            binding.labeltxt.text = newLabel
             dialog.dismiss()
         }
 
         dialog.show()
     }
-
 }

@@ -2,6 +2,7 @@ package com.alarmify.wakeupnerd
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -11,12 +12,23 @@ import com.alarmify.wakeupnerd.databinding.ActivityHomeBinding
 import android.content.Intent
 import com.alarmify.wakeupnerd.data.Alarm
 import com.alarmify.wakeupnerd.data.AlarmAdapter
+import com.alarmify.wakeupnerd.data.AlarmStorageManager
 
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var alarmAdapter: AlarmAdapter
     private val alarmList = mutableListOf<Alarm>()
+
+    // ActivityResultLauncher for AddAlarmActivity
+    private val addEditAlarmLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // Reload alarms when returning from AddAlarmActivity
+            loadAlarms()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +47,7 @@ class HomeActivity : AppCompatActivity() {
 
         binding.tambahAlarm.setOnClickListener {
             val intent = Intent(this, AddAlarmActivity::class.java)
-            startActivity(intent)
+            addEditAlarmLauncher.launch(intent)
         }
 
         binding.btnSettings.setOnClickListener {
@@ -44,10 +56,26 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Reload alarms when returning to this activity
+        loadAlarms()
+    }
+
     private fun setupRecyclerView() {
-        alarmAdapter = AlarmAdapter(alarmList) { position, isChecked ->
-            alarmList[position].isEnabled = isChecked
-        }
+        alarmAdapter = AlarmAdapter(
+            alarmList,
+            onSwitchChanged = { position, isChecked ->
+                // Update alarm enabled state
+                val alarm = alarmList[position]
+                val updatedAlarm = alarm.copy(isEnabled = isChecked)
+                AlarmStorageManager.saveAlarm(this, updatedAlarm)
+                alarmList[position] = updatedAlarm
+            },
+            onAlarmClick = { position ->
+                openEditAlarm(position)
+            }
+        )
 
         binding.recyclerViewAlarms.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
@@ -55,13 +83,25 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun openEditAlarm(position: Int) {
+        val alarm = alarmList[position]
+        val intent = Intent(this, AddAlarmActivity::class.java).apply {
+            putExtra("EDIT_MODE", true)
+            putExtra("ALARM_ID", alarm.id)
+        }
+        addEditAlarmLauncher.launch(intent)
+    }
+
     private fun loadAlarms() {
         alarmList.clear()
-        alarmList.addAll(listOf(
-            Alarm("07:00", "Sekali, Hari Minggu", true, false),
-            Alarm("12:00", "Harian, Kerja Kantor", false, true),
-            Alarm("09:30", "Sekali, Sarapan", true, false)
-        ))
+
+        // Load alarms from storage
+        val storedAlarms = AlarmStorageManager.getAllAlarms(this)
+        alarmList.addAll(storedAlarms)
+
+        // Sort alarms by time (optional)
+        alarmList.sortWith(compareBy({ it.isPM }, { it.hour }, { it.minute }))
+
         alarmAdapter.notifyDataSetChanged()
         updateEmptyState()
     }
