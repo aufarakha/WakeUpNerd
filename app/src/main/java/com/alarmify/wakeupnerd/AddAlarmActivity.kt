@@ -48,6 +48,7 @@ class AddAlarmActivity : AppCompatActivity() {
         binding.secNum.setMinValue(0);
         binding.secNum.setMaxValue(59);
 
+
         binding.btnSave.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
@@ -58,6 +59,42 @@ class AddAlarmActivity : AppCompatActivity() {
             showLabelDialog()
         }
 
+        // AM/PM toggle functionality
+        binding.btnAm.setOnClickListener {
+            selectAmPm(true)
+        }
+
+        binding.btnPm.setOnClickListener {
+            selectAmPm(false)
+        }
+
+        binding.cardRingtone.setOnClickListener {
+            val intent = Intent(this, RingtoneActivity::class.java)
+            startActivity(intent)
+        }
+
+        
+
+    }
+
+    private fun selectAmPm(isAm: Boolean) {
+        if (isAm) {
+            // AM selected - blue background, white text
+            binding.btnAm.setBackgroundResource(R.drawable.rounder_bluebg)
+            binding.btnAm.setTextColor(getColor(android.R.color.white))
+
+            // PM unselected - white background, black text
+            binding.btnPm.setBackgroundResource(R.drawable.rounded_white_bg)
+            binding.btnPm.setTextColor(getColor(android.R.color.black))
+        } else {
+            // PM selected - blue background, white text
+            binding.btnPm.setBackgroundResource(R.drawable.rounder_bluebg)
+            binding.btnPm.setTextColor(getColor(android.R.color.white))
+
+            // AM unselected - white background, black text
+            binding.btnAm.setBackgroundResource(R.drawable.rounded_white_bg)
+            binding.btnAm.setTextColor(getColor(android.R.color.black))
+        }
     }
 
     private fun showLabelDialog() {
