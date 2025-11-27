@@ -20,9 +20,7 @@ import java.io.FileOutputStream
 class RingtoneActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRingtoneBinding
     private lateinit var myRingtonesAdapter: RingtoneAdapter
-    private lateinit var alarmRingtonesAdapter: RingtoneAdapter
     private val myRingtonesList = mutableListOf<Ringtone>()
-    private val alarmRingtonesList = mutableListOf<Ringtone>()
 
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -63,15 +61,6 @@ class RingtoneActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@RingtoneActivity)
             adapter = myRingtonesAdapter
         }
-
-        alarmRingtonesAdapter = RingtoneAdapter(alarmRingtonesList) { position ->
-            handleApplyRingtone(alarmRingtonesList[position])
-        }
-
-        binding.recyclerViewAlarmRingtones.apply {
-            layoutManager = LinearLayoutManager(this@RingtoneActivity)
-            adapter = alarmRingtonesAdapter
-        }
     }
 
     private fun loadRingtones() {
@@ -88,26 +77,10 @@ class RingtoneActivity : AppCompatActivity() {
             }
         }
 
-        alarmRingtonesList.clear()
-        alarmRingtonesList.addAll(
-            listOf(
-                Ringtone("Alarm clock", "00:03"),
-                Ringtone("Beep", "00:02"),
-                Ringtone("Breeze", "00:17"),
-                Ringtone("Chimes", "00:08"),
-                Ringtone("Daydream", "00:32"),
-                Ringtone("Fireflies", "00:50", true),
-                Ringtone("Morning dew", "01:00")
-            )
-        )
-
         myRingtonesAdapter.notifyDataSetChanged()
-        alarmRingtonesAdapter.notifyDataSetChanged()
     }
 
     private fun handleApplyRingtone(ringtone: Ringtone) {
-        // Handle apply ringtone logic
-        // You can pass the selected ringtone back to AddAlarmActivity
         // Pass the selected ringtone back to AddAlarmActivity
         val resultIntent = Intent().apply {
             putExtra("SELECTED_RINGTONE", ringtone.name)

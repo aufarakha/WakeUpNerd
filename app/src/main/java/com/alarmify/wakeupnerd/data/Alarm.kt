@@ -9,6 +9,7 @@ data class Alarm(
     val ringtone: String = "Alarm clock",
     val repeat: String = "Sekali",
     val vibrate: Boolean = true,
+    val volume: Int = 50, // Alarm volume (0-100)
     var isEnabled: Boolean = true,
     var isHighlighted: Boolean = false
 ) {

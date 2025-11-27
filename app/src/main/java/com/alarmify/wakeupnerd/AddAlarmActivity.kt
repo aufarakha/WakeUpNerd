@@ -8,6 +8,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.alarmify.wakeupnerd.databinding.ActivityAddAlarmBinding
 import android.content.Intent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
+import android.media.AudioManager
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.Toast
@@ -19,6 +23,16 @@ class AddAlarmActivity : AppCompatActivity() {
     private var isEditMode = false
     private var currentAlarmId: String? = null
     private var isAmSelected = true // Track AM/PM selection
+    private lateinit var audioManager: AudioManager
+
+    // BroadcastReceiver for volume changes
+    private val volumeChangeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == "android.media.VOLUME_CHANGED_ACTION") {
+                updateSeekBarFromPhoneVolume()
+            }
+        }
+    }
 
     // ActivityResultLauncher for RingtoneActivity
     private val ringtonePickerLauncher = registerForActivityResult(
@@ -75,6 +89,43 @@ class AddAlarmActivity : AppCompatActivity() {
         }
 
         setupClickListeners()
+        // Initialize AudioManager first
+        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        // Set volume control to alarm stream
+        volumeControlStream = AudioManager.STREAM_ALARM
+
+        setupSeekBar()
+        registerVolumeReceiver()
+    }
+
+    private fun registerVolumeReceiver() {
+        val filter = IntentFilter("android.media.VOLUME_CHANGED_ACTION")
+        registerReceiver(volumeChangeReceiver, filter)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try {
+            unregisterReceiver(volumeChangeReceiver)
+        } catch (e: Exception) {
+            // Receiver not registered
+        }
+    }
+
+    private fun updateSeekBarFromPhoneVolume() {
+        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+        val currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+
+        // Convert to percentage (0-100)
+        val volumePercentage = ((currentVolume.toFloat() / maxVolume) * 100).toInt()
+
+        // Update seekbar
+        binding.seekBar11.progress = volumePercentage
+    }
+
+    private fun setupSeekBar() {
+        // Initialize with phone's current alarm volume
+        updateSeekBarFromPhoneVolume()
     }
 
     private fun setupNumberPickers() {
@@ -173,6 +224,9 @@ class AddAlarmActivity : AppCompatActivity() {
 
             // Set vibrate
             binding.valueVibrate.text = if (alarm.vibrate) "Aktif" else "Nonaktif"
+
+            // Set volume
+            binding.seekBar11.progress = alarm.volume
         }
     }
 
@@ -183,6 +237,7 @@ class AddAlarmActivity : AppCompatActivity() {
         val ringtone = binding.valueRingtone.text.toString()
         val repeat = binding.valueRepeat.text.toString()
         val vibrate = binding.valueVibrate.text.toString() == "Aktif"
+        val volume = binding.seekBar11.progress
 
         val alarm = Alarm(
             id = currentAlarmId ?: System.currentTimeMillis().toString(),
@@ -193,6 +248,7 @@ class AddAlarmActivity : AppCompatActivity() {
             ringtone = ringtone,
             repeat = repeat,
             vibrate = vibrate,
+            volume = volume,
             isEnabled = true
         )
 

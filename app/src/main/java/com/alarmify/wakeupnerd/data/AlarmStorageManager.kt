@@ -136,6 +136,7 @@ object AlarmStorageManager {
             put("ringtone", alarm.ringtone)
             put("repeat", alarm.repeat)
             put("vibrate", alarm.vibrate)
+            put("volume", alarm.volume)
             put("isEnabled", alarm.isEnabled)
             put("isHighlighted", alarm.isHighlighted)
         }
@@ -154,6 +155,7 @@ object AlarmStorageManager {
             ringtone = json.optString("ringtone", "Alarm clock"),
             repeat = json.optString("repeat", "Sekali"),
             vibrate = json.optBoolean("vibrate", true),
+            volume = json.optInt("volume", 50),
             isEnabled = json.optBoolean("isEnabled", true),
             isHighlighted = json.optBoolean("isHighlighted", false)
         )
