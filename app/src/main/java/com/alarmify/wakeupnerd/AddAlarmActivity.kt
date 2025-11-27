@@ -17,6 +17,7 @@ import android.widget.NumberPicker
 import android.widget.Toast
 import com.alarmify.wakeupnerd.data.Alarm
 import com.alarmify.wakeupnerd.data.AlarmStorageManager
+import com.alarmify.wakeupnerd.data.AlarmScheduler
 
 class AddAlarmActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddAlarmBinding
@@ -89,8 +90,10 @@ class AddAlarmActivity : AppCompatActivity() {
         }
 
         setupClickListeners()
+
         // Initialize AudioManager first
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+
         // Set volume control to alarm stream
         volumeControlStream = AudioManager.STREAM_ALARM
 
@@ -255,7 +258,10 @@ class AddAlarmActivity : AppCompatActivity() {
         val success = AlarmStorageManager.saveAlarm(this, alarm)
 
         if (success) {
-            Toast.makeText(this, "Alarm tersimpan", Toast.LENGTH_SHORT).show()
+            // Schedule the alarm
+            AlarmScheduler.scheduleAlarm(this, alarm)
+
+            Toast.makeText(this, "Alarm tersimpan dan dijadwalkan", Toast.LENGTH_SHORT).show()
             setResult(RESULT_OK)
             finish()
         } else {
@@ -268,6 +274,9 @@ class AddAlarmActivity : AppCompatActivity() {
             val success = AlarmStorageManager.deleteAlarm(this, id)
 
             if (success) {
+                // Cancel the scheduled alarm
+                AlarmScheduler.cancelAlarm(this, id)
+
                 Toast.makeText(this, "Alarm dihapus", Toast.LENGTH_SHORT).show()
                 setResult(RESULT_OK)
                 finish()

@@ -54,10 +54,20 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
+
+        // Check permissions on first launch
+        checkAndRequestPermissions()
+
+        binding.tvTitle.setOnClickListener {
+            val intent = Intent(this, AlarmPlayActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {
         super.onResume()
+
+        checkPermissionsIfNeeded()
         // Reload alarms when returning to this activity
         loadAlarms()
     }
@@ -112,5 +122,56 @@ class HomeActivity : AppCompatActivity() {
         binding.tvNoAlarm.isVisible = isEmpty
         binding.tvAddAlarmHint.isVisible = isEmpty
         binding.recyclerViewAlarms.isVisible = !isEmpty
+    }
+
+
+    private fun checkAndRequestPermissions() {
+        // Check if this is first launch or permissions are missing
+        val prefs = getSharedPreferences("WakeUpNerdPrefs", MODE_PRIVATE)
+        val isFirstLaunch = prefs.getBoolean("isFirstLaunch", true)
+
+        if (isFirstLaunch || !com.alarmify.wakeupnerd.utils.PermissionHelper.checkAllPermissions(this)) {
+            // Mark as not first launch
+            prefs.edit().putBoolean("isFirstLaunch", false).apply()
+
+            // Show permission dialog
+            com.alarmify.wakeupnerd.utils.PermissionHelper.requestMissingPermissions(this)
+        }
+    }
+
+    private fun checkPermissionsIfNeeded() {
+        // Silently check if permissions are still missing
+        if (!com.alarmify.wakeupnerd.utils.PermissionHelper.checkAllPermissions(this)) {
+            // Don't show dialog every time, just on first launch
+            // User can manually grant from settings
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            com.alarmify.wakeupnerd.utils.PermissionHelper.REQUEST_CODE_POST_NOTIFICATIONS -> {
+                // After POST_NOTIFICATIONS, check next permission
+                com.alarmify.wakeupnerd.utils.PermissionHelper.requestMissingPermissions(this)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            com.alarmify.wakeupnerd.utils.PermissionHelper.REQUEST_CODE_SYSTEM_ALERT_WINDOW,
+            com.alarmify.wakeupnerd.utils.PermissionHelper.REQUEST_CODE_SCHEDULE_EXACT_ALARM,
+            com.alarmify.wakeupnerd.utils.PermissionHelper.REQUEST_CODE_NOTIFICATIONS -> {
+                // After each permission, check next one
+                com.alarmify.wakeupnerd.utils.PermissionHelper.requestMissingPermissions(this)
+            }
+        }
     }
 }
