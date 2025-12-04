@@ -62,6 +62,11 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, AlarmPlayActivity::class.java)
             startActivity(intent)
         }
+
+        binding.accountIcon.setOnClickListener {
+            val intent = Intent(this, AccountActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onResume() {

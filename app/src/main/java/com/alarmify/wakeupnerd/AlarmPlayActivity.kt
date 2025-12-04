@@ -45,6 +45,15 @@ class AlarmPlayActivity : AppCompatActivity() {
     private val questions = mutableListOf<MathQuestion>()
     private var waitTimer: CountDownTimer? = null
 
+    // Real-time clock update
+    private val timeUpdateHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private val timeUpdateRunnable = object : Runnable {
+        override fun run() {
+            updateTimeDisplay()
+            timeUpdateHandler.postDelayed(this, 1000) // Update every second
+        }
+    }
+
     data class MathQuestion(
         val num1: Int,
         val num2: Int,
@@ -96,8 +105,8 @@ class AlarmPlayActivity : AppCompatActivity() {
             startVibration()
         }
 
-        // Display current time
-        updateTimeDisplay()
+        // Start real-time clock display
+        startRealtimeClock()
 
         // Show first question
         showQuestion()
@@ -403,6 +412,14 @@ class AlarmPlayActivity : AppCompatActivity() {
         binding.timeTextView2.text = amPmFormat.format(calendar.time)
     }
 
+    private fun startRealtimeClock() {
+        timeUpdateHandler.post(timeUpdateRunnable)
+    }
+
+    private fun stopRealtimeClock() {
+        timeUpdateHandler.removeCallbacks(timeUpdateRunnable)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         stopAlarmSound()
@@ -410,6 +427,7 @@ class AlarmPlayActivity : AppCompatActivity() {
             stopVibration()
         }
         waitTimer?.cancel()
+        stopRealtimeClock()
     }
 
     override fun onBackPressed() {
